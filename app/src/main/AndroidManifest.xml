@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Assignment_Login"
+        android:name="com.example.assignment_login.MyApp"
         tools:targetApi="31">
         <activity
             android:name=".SignupActivity"
