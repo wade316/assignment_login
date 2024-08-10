@@ -214,7 +214,6 @@ class SignupActivity : AppCompatActivity() {
             binding.tvIdCheck.setTextColor(getColorStateList(R.color.red))
             return false
         }
-//        return Pattern.matches(regex,binding.edId.text)
     }
     //이메일 조건 확인 2
     private fun emailcheck(email: String): Boolean {

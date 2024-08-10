@@ -52,9 +52,6 @@ class MainActivity : AppCompatActivity() {
             if (viewModel.loginCheck.value == true) {
                 Toast.makeText(this, "로그인 되었습니다", Toast.LENGTH_SHORT).show()
             }
-//            else {
-//                Toast.makeText(this, "로그아웃 되었습니다", Toast.LENGTH_SHORT).show()
-//            }
         }
         //로그인 시도
         binding.btnSignin.setOnClickListener {
