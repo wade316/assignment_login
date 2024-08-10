@@ -28,6 +28,16 @@
         app:layout_constraintBottom_toTopOf="@+id/ed_name"
         app:layout_constraintStart_toStartOf="@+id/ed_name" />
 
+    <TextView
+        android:id="@+id/tv_name_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="14sp"
+        android:textColor="@color/red"
+        app:layout_constraintStart_toStartOf="@+id/ed_name"
+        app:layout_constraintTop_toBottomOf="@+id/ed_name" />
+
     <EditText
         android:id="@+id/ed_name"
         android:layout_width="0dp"
@@ -153,7 +163,7 @@
         android:layout_marginTop="40dp"
         android:gravity="center"
         android:padding="10dp"
-        android:background="@drawable/button_background_blue"
+        android:background="@drawable/shape_clicked_blue"
         app:layout_constraintEnd_toEndOf="@+id/ed_pw_check"
         app:layout_constraintStart_toStartOf="@+id/ed_pw_check"
         app:layout_constraintTop_toBottomOf="@+id/ed_pw_check" />

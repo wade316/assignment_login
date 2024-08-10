@@ -70,14 +70,22 @@ class SignupActivity : AppCompatActivity() {
                 binding.tvIdCheck.visibility = View.GONE
             }
         }
+        binding.edName.setOnFocusChangeListener { v, hasFocus ->
+            if (hasFocus) {
+                binding.tvNameCheck.visibility = View.VISIBLE
+                nameTextChanged()
+            } else {
+                binding.tvNameCheck.visibility = View.GONE
+            }
+        }
     }
 
     private fun signupDone() {
         val name = binding.edName.text
         val email = binding.edId.text
         val password = binding.edPw.text
-        val user = UserInfo(email.toString(), viewModel.getSign(password.toString()))
-        if (!name.isEmpty() && isEmailCheck() && isPwCheck() && passwordCheck()) {
+        val user = UserInfo(name.toString(), email.toString())
+        if (nameCheck() && isEmailCheck() && isPwCheck() && passwordCheck()) {
             MyApp.pref.addUser(email.toString(), viewModel.getSign(password.toString()))
             userInfo.add(user)
             viewModel.addLoginInfo(userInfo)
@@ -166,6 +174,21 @@ class SignupActivity : AppCompatActivity() {
         })
     }
 
+    private fun nameTextChanged() {
+        binding.edName.addTextChangedListener(object  : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                nameCheck()
+            }
+
+        })
+    }
+
     //비밀번호 조건 확인
     private fun isPwCheck(): Boolean {
         val regex = "^(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&.])[A-Za-z[0-9]$@$!%*#?&.]{8,12}$"
@@ -202,6 +225,19 @@ class SignupActivity : AppCompatActivity() {
         } else {
             binding.tvIdCheck.text = "e-mail형식으로 입력해 주세요"
             binding.tvIdCheck.setTextColor(getColorStateList(R.color.red))
+            return false
+        }
+    }
+
+    private fun nameCheck(): Boolean {
+        val regex = "^[a-zA-Z가-힣]+\$"
+        if (Pattern.matches(regex,binding.edName.text)) {
+            binding.tvNameCheck.text = "올바른 형식 입니다"
+            binding.tvNameCheck.setTextColor(getColorStateList(R.color.green))
+            return true
+        } else {
+            binding.tvNameCheck.text = "이름을 입력해 주세요"
+            binding.tvNameCheck.setTextColor(getColorStateList(R.color.red))
             return false
         }
     }

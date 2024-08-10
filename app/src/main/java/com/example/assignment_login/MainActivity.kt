@@ -50,38 +50,40 @@ class MainActivity : AppCompatActivity() {
         //로그인 상태 감지
         viewModel.loginCheck.observe(this) {
             if (viewModel.loginCheck.value == true) {
-                binding.btnSignin.text = "로그아웃"
-            }else {
-                binding.btnSignin.text = "로그인"
-                Toast.makeText(this, "로그아웃 되었습니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "로그인 되었습니다", Toast.LENGTH_SHORT).show()
             }
+//            else {
+//                Toast.makeText(this, "로그아웃 되었습니다", Toast.LENGTH_SHORT).show()
+//            }
         }
         //로그인 시도
         binding.btnSignin.setOnClickListener {
-            loginCheck()
+            if (loginCheck()) {
+                val intent = Intent(this, ProfileActivity::class.java)
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                startActivity(intent)
+            }
         }
         //엔터키 제어
         binding.edId.setOnEditorActionListener { _, actionId, event ->
-//            var isSuccess = false
             if (actionId == EditorInfo.IME_ACTION_NEXT ) {
                 binding.edPw.requestFocus()
                 Toast.makeText(this, "엔터", Toast.LENGTH_SHORT).show()
-//                loginCheck()
-//                isSuccess = true
                 true
             } else false
-//            isSuccess
         }
     }
     //로그인 성공여부
-    fun loginCheck() {
+    private fun loginCheck(): Boolean {
         val id = binding.edId.text.toString()
         val pw = binding.edPw.text.toString()
         if (MyApp.pref.containId(id) && MyApp.pref.getUser(id) == viewModel.getSign(pw)) {
             viewModel.isLoginCheck()
             Toast.makeText(this, "로그인 성공", Toast.LENGTH_SHORT).show()
+            return true
         } else {
             Toast.makeText(this, "아이디, 비밀번호를 확인해 주세요", Toast.LENGTH_SHORT).show()
+            return false
         }
     }
 }

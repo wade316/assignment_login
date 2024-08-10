@@ -52,7 +52,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="30sp"
-        android:background="@drawable/button_background_blue"
+        android:background="@drawable/shape_clicked_blue"
         android:padding="10dp"
         android:text="로그인"
         android:textColor="@color/white"
@@ -72,7 +72,7 @@
         android:text="회원가입"
         android:textSize="20sp"
         android:textColor="@color/darkgray"
-        android:background="@drawable/button_background_gray"
+        android:background="@drawable/shape_clicked_gray"
         app:layout_constraintEnd_toEndOf="@+id/btn_signin"
         app:layout_constraintStart_toStartOf="@+id/btn_signin"
         app:layout_constraintTop_toBottomOf="@+id/btn_signin" />
