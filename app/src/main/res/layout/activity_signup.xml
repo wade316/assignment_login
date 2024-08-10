@@ -5,6 +5,7 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".SignupActivity">
 
     <ImageView
@@ -37,6 +38,7 @@
         android:background="@drawable/stroke"
         android:hint="이름"
         android:padding="10dp"
+        android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView" />
@@ -58,6 +60,7 @@
         android:background="@drawable/stroke"
         android:hint="e-mail형식으로 입력해 주세요"
         android:padding="10dp"
+        android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="@+id/ed_name"
         app:layout_constraintStart_toStartOf="@+id/ed_name"
         app:layout_constraintTop_toBottomOf="@+id/ed_name" />
@@ -154,5 +157,28 @@
         app:layout_constraintEnd_toEndOf="@+id/ed_pw_check"
         app:layout_constraintStart_toStartOf="@+id/ed_pw_check"
         app:layout_constraintTop_toBottomOf="@+id/ed_pw_check" />
+
+    <TextView
+        android:id="@+id/tv_duplicate_check"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="중복확인"
+        android:layout_marginEnd="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/ed_id"
+        app:layout_constraintEnd_toEndOf="@+id/ed_id"
+        app:layout_constraintTop_toTopOf="@+id/ed_id" />
+
+    <ImageButton
+        android:id="@+id/igbtn_back"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:background="@color/white"
+        android:scaleType="centerCrop"
+        android:src="@drawable/img_back"
+        android:padding="5dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -3,8 +3,9 @@ package com.example.assignment_login
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
+import android.util.Patterns
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.assignment_login.databinding.ActivitySignupBinding
@@ -31,6 +32,27 @@ class SignupActivity : AppCompatActivity() {
 //            insets
 //        }
 
+        pwCheckChanged()
+        isFocus()
+        isClick()
+
+
+    }
+    private fun isClick() {
+        binding.btnDone.setOnClickListener {
+            signupDone()
+        }
+
+        //중복확인 버튼
+        binding.tvDuplicateCheck.setOnClickListener {
+            userIdCheck(binding.edId.text.toString())
+        }
+
+        binding.igbtnBack.setOnClickListener {
+            finish()
+        }
+    }
+    private fun isFocus() {
         //EditText가 포커스 될때 안내문구 나오게 하기
         binding.edPw.setOnFocusChangeListener { v, hasFocus ->
             if (hasFocus) {
@@ -48,46 +70,40 @@ class SignupActivity : AppCompatActivity() {
                 binding.tvIdCheck.visibility = View.GONE
             }
         }
-        binding.btnDone.setOnClickListener {
-            val name = binding.edName.text
-            val email = binding.edId.text
-            val password = binding.edPw.text
-            val user = UserInfo(email.toString(), password.toString())
-            if (!name.isEmpty() && isEmailCheck() && isPwCheck() && passwordCheck()) {
-                getSign(password.toString()).let {
-                    Log.d("sdc", "getSign: $it")
-                    MyApp.pref.setString(email.toString(), it)
-                    userInfo.add(user)
-                    viewModel.addLoginInfo(userInfo)
-
-                    for (i in viewModel.loginInfo.value!!) {
-                        Log.d("sdc", "loginInfo: ${i.email} ${i.password}")
-                    }
-                    for (u in userInfo) {
-                        Log.d("sdc", "userInfo: ${u.email} ${u.password}")
-                    }
-                    finish()
-                }
-            }
-        }
-        pwCheckChanged()
-
-
     }
 
-    fun getSign(password: String): String {
-        val hash: ByteArray
-        try {
-            val mdigest = MessageDigest.getInstance("SHA-256")
-            mdigest.update(password.toByteArray())
-            hash = mdigest.digest()
-        } catch (e: CloneNotSupportedException) {
-            throw DigestException("couldn't make digest of patial content")
+    private fun signupDone() {
+        val name = binding.edName.text
+        val email = binding.edId.text
+        val password = binding.edPw.text
+        val user = UserInfo(email.toString(), viewModel.getSign(password.toString()))
+        if (!name.isEmpty() && isEmailCheck() && isPwCheck() && passwordCheck()) {
+            MyApp.pref.addUser(email.toString(), viewModel.getSign(password.toString()))
+            userInfo.add(user)
+            viewModel.addLoginInfo(userInfo)
+            Toast.makeText(this, "회원가입이 완료되었습니다", Toast.LENGTH_SHORT).show()
+            finish()
+        } else if (!name.isEmpty() && !isEmailCheck() && isPwCheck() && passwordCheck()) {
+            Toast.makeText(this, "이메일 형식이 올바르지 않습니다", Toast.LENGTH_SHORT).show()
+        } else if (!name.isEmpty() && isEmailCheck() && !isPwCheck() && passwordCheck()) {
+            Toast.makeText(this, "비밀번호 형식이 올바르지 않습니다", Toast.LENGTH_SHORT).show()
+        }else if (!name.isEmpty() && isEmailCheck() && isPwCheck() && !passwordCheck()) {
+            Toast.makeText(this, "비밀번호가 일치하지 않습니다", Toast.LENGTH_SHORT).show()
+        }else {
+            Toast.makeText(this, "입력되지 않은 정보가 있습니다", Toast.LENGTH_SHORT).show()
         }
-        //% = 문자열 시작, 0 = 자릿수가 부족하면 0으로 채우고. 2 = 자릿수 묶음
-        //x = 16진수로 출력, 대문자'X'일 경우 대문자로 출력
-        return hash.joinToString("") { "%02X".format(it) }
     }
+
+    //email 중복 확인
+    private fun userIdCheck(id: String) {
+        if (MyApp.pref.containId(id)) {
+            Toast.makeText(this, "중복된 아이디 입니다", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "사용 가능한 아이디 입니다", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
 
     //비밀번호 확인 입력값 변화 감지
     private fun pwCheckChanged() {
@@ -141,6 +157,7 @@ class SignupActivity : AppCompatActivity() {
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 isEmailCheck()
+//                emailcheck(binding.edId.text.toString())
             }
 
             override fun afterTextChanged(s: Editable?) {
@@ -175,5 +192,17 @@ class SignupActivity : AppCompatActivity() {
             return false
         }
 //        return Pattern.matches(regex,binding.edId.text)
+    }
+    //이메일 조건 확인 2
+    private fun emailcheck(email: String): Boolean {
+        if (Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            binding.tvIdCheck.text = "올바른 형식 입니다"
+            binding.tvIdCheck.setTextColor(getColorStateList(R.color.green))
+            return true
+        } else {
+            binding.tvIdCheck.text = "e-mail형식으로 입력해 주세요"
+            binding.tvIdCheck.setTextColor(getColorStateList(R.color.red))
+            return false
+        }
     }
 }
